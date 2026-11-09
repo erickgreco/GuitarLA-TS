@@ -1,78 +1,73 @@
-# React + TypeScript + Vite
+# GuitarLA
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Tienda en línea de guitarras con carrito de compra, desarrollada con React, TypeScript y Vite.
 
-Currently, two official plugins are available:
+**Demo:** https://guitarla-ts-erickgreco.netlify.app/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Funcionalidades
 
-## React Compiler
+- Catálogo de guitarras con imagen, descripción y precio.
+- Agregar productos al carrito.
+- Aumentar y disminuir la cantidad de cada producto.
+- Eliminar productos o vaciar el carrito.
+- Cálculo automático del total.
+- Persistencia del carrito en `localStorage`.
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Stack
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+| Área                 | Tecnología        |
+| -------------------- | ----------------- |
+| UI                   | React             |
+| Lenguaje             | TypeScript        |
+| Bundler / Dev server | Vite              |
+| Estilos              | CSS (`index.css`) |
+| Despliegue           | Netlify           |
+| Control de versiones | Git + GitHub      |
 
-## Expanding the ESLint configuration
+## Arquitectura
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+La lógica del carrito está separada de la interfaz: los componentes solo renderizan y la lógica de estado vive en un hook personalizado.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+| Archivo                     | Responsabilidad                                                                     |
+| --------------------------- | ----------------------------------------------------------------------------------- |
+| `src/main.tsx`              | Punto de entrada; monta la aplicación en el DOM                                     |
+| `src/App.tsx`               | Componente raíz; consume `useCart` y distribuye datos y funciones a los componentes |
+| `src/components/Header.tsx` | Encabezado y vista del carrito                                                      |
+| `src/components/Guitar.tsx` | Tarjeta de producto del catálogo                                                    |
+| `src/hooks/useCart.ts`      | Hook personalizado con el estado y las operaciones del carrito                      |
+| `src/data/db.ts`            | Catálogo de guitarras (datos locales)                                               |
+| `src/types/index.ts`        | Tipos de TypeScript compartidos                                                     |
+| `src/index.css`             | Estilos globales                                                                    |
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Ejecutar en local
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Requisitos: Node.js (versión LTS) y npm.
 
+```bash
+git clone git@github.com:erickgreco/GuitarLA-TS.git
+cd GuitarLA-TS
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Scripts disponibles:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Comando           | Descripción                                    |
+| ----------------- | ---------------------------------------------- |
+| `npm run dev`     | Servidor de desarrollo con recarga en caliente |
+| `npm run build`   | Genera el build de producción en `dist/`       |
+| `npm run preview` | Sirve localmente el build de producción        |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Despliegue
 
-```
+El sitio se despliega en Netlify, conectado a este repositorio: cada `push` a `main` dispara un deploy automático.
+
+| Configuración     | Valor           |
+| ----------------- | --------------- |
+| Build command     | `npm run build` |
+| Publish directory | `dist`          |
+
+## Autor
+
+**Erick Gutierrez Sanchez**
+GitHub: [@erickgreco](https://github.com/erickgreco)
